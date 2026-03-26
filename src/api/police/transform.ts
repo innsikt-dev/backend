@@ -1,10 +1,9 @@
-import { map } from 'zod'
 import type { PoliceLogResponse } from './schema.js'
 import { syncDistrict } from '../../sync/district.js'
 import { syncMunicipality } from '../../sync/municipality.js'
 import { syncCategory } from '../../sync/category.js'
-import { ca } from 'zod/locales'
 import { syncIncident } from '../../sync/incidents.js'
+import * as db from '../../db/index.js'
 
 export async function transformPoliceLog(data: PoliceLogResponse) {
   const district = data.data.map((d) => d.district)
@@ -30,4 +29,5 @@ export async function transformPoliceLog(data: PoliceLogResponse) {
   await syncMunicipality(municipality)
   await syncCategory(category)
   await syncIncident(incident)
+  await db.query('REFRESH MATERIALIZED VIEW mv_dashboard_base', [])
 }
