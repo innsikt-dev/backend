@@ -4,6 +4,6 @@ const pool = new Pool({
   connectionString: DATABASE_URL,
 })
 
-export const query = (query: string, params: any[]) => {
-  return pool.query(query, params)
+export const query = (text: string, params: unknown[]) => {
+  return pool.query(text, params)
 }
