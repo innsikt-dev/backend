@@ -4,6 +4,7 @@ import { Hono } from 'hono'
 import { fetchPoliceLog } from './api/police/index.js'
 import { transformPoliceLog } from './api/police/transform.js'
 import { dashboard } from './features/dashboard/route.js'
+import { historic } from './features/historic/route.js'
 const app = new Hono()
 app.onError((err, c) => {
   console.error(err)
@@ -16,6 +17,7 @@ app.get('/', async (c) => {
   return c.text('hello')
 })
 app.route('/dashboard/', dashboard)
+app.route('/historic/', historic)
 
 serve(
   {
