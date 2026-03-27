@@ -1,10 +1,9 @@
 import * as db from '../../../db/index.js'
-
-export async function queryDashboardEvents() {
+export async function queryDashboardThread(threadId: string) {
   const query = await db.query(
     `
-    SELECT * FROM (
-    SELECT DISTINCT ON (i.thread_id)
+       SELECT
+      i.thread_id,
         m.id,
         m.municipality_name,
         m.lat,
@@ -19,13 +18,13 @@ export async function queryDashboardEvents() {
     FROM incidents i
     JOIN category c ON c.id = i.category_id
     JOIN municipality m ON m.id = i.municipality_id
-    WHERE created_on::date = CURRENT_DATE AND is_active = true
+    WHERE created_on::date = CURRENT_DATE
+    AND LOWER(thread_id) = LOWER($1)
     ORDER BY i.thread_id, i.created_on ASC
-) sub
-ORDER BY is_active DESC, created_on DESC
-LIMIT 30;
-`,
-    []
+
+
+        `,
+    [threadId]
   )
 
   return query.rows.length === 0 ? [] : query.rows
