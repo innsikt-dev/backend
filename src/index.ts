@@ -6,6 +6,7 @@ import { transformPoliceLog } from './api/police/transform.js'
 import { dashboard } from './features/dashboard/route.js'
 import { historic } from './features/historic/route.js'
 import { municipality } from './features/municipality/route.js'
+import { runSync } from './sync/index.js'
 const app = new Hono()
 app.onError((err, c) => {
   console.error(err)
@@ -20,7 +21,7 @@ app.get('/', async (c) => {
 app.route('/dashboard/', dashboard)
 app.route('/historic/', historic)
 app.route('/municipality/', municipality)
-
+/* runSync() */
 serve(
   {
     fetch: app.fetch,
