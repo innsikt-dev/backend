@@ -1,4 +1,5 @@
 import * as db from '../db/index.js'
+import { GEOCODE_API_KEY } from '../lib/env.js'
 import type { Municipality } from './types.js'
 
 export async function syncMunicipality(data: Municipality[]): Promise<void> {
@@ -16,11 +17,11 @@ export async function syncMunicipality(data: Municipality[]): Promise<void> {
 
     try {
       const geo = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(m.municipality_name)}&countrycodes=no&format=json&limit=1`,
-        { headers: { 'User-Agent': 'innsikt.dev' } }
+        `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(m.municipality_name)}&filter=countrycode:no&limit=1&apiKey=${GEOCODE_API_KEY}`
       )
-      if (geo.ok && geo.headers.get('content-type')?.includes('json')) {
-        const [result] = await geo.json()
+      if (geo.ok) {
+        const data = await geo.json()
+        const result = data.features?.[0]?.properties
         lat = result?.lat ?? null
         lng = result?.lon ?? null
       }
@@ -30,8 +31,10 @@ export async function syncMunicipality(data: Municipality[]): Promise<void> {
 
     await db.query(
       `INSERT INTO municipality(municipality_name, police_district_id, lat, lng)
-       VALUES($1, $2, $3, $4)
-       ON CONFLICT(municipality_name) DO NOTHING`,
+VALUES($1, $2, $3, $4)
+ON CONFLICT(municipality_name) DO UPDATE SET
+  lat = CASE WHEN municipality.lat IS NULL THEN EXCLUDED.lat ELSE municipality.lat END,
+  lng = CASE WHEN municipality.lng IS NULL THEN EXCLUDED.lng ELSE municipality.lng END`,
       [m.municipality_name, districtMap.get(m.district_name), lat, lng]
     )
 

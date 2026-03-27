@@ -1,3 +1,3 @@
 const DATABASE_URL = process.env.DATABASE_URL
-
-export { DATABASE_URL }
+const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY
+export { DATABASE_URL, GEOCODE_API_KEY }
