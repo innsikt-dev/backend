@@ -24,7 +24,7 @@ export async function queryMunicipality(id: string) {
     `
     SELECT 
         m.municipality_name,
-        COUNT(*)::int as amount
+        COUNT(DISTINCT i.thread_id)::int as amount
     FROM
         incidents i
     JOIN municipality m 
@@ -43,8 +43,7 @@ export async function queryMunicipality(id: string) {
   const municipalityCommonCategory = await db.query(
     `
     SELECT 
-        m.municipality_name,
-        COUNT(c.type)::int as category
+       c.type AS category
     FROM
         incidents i
     JOIN municipality m 
@@ -59,7 +58,7 @@ export async function queryMunicipality(id: string) {
     GROUP BY 
         m.municipality_name, c.type
     ORDER BY 
-        COUNT(c.type) DESC
+        COUNT(DISTINCT i.thread_id) DESC
     LIMIT 1;`,
     [id]
   )
