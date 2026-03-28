@@ -3,12 +3,12 @@ import type { DashboardKpi } from './types.js'
 
 export async function queryDashboardKpi(): Promise<DashboardKpi> {
   const totalIncidents = await db.query(
-    `SELECT COUNT(*) AS total_incidents FROM mv_dashboard_base
+    `SELECT COUNT(DISTINCT thread_id) AS total_incidents FROM mv_dashboard_base
      WHERE created_on::date = CURRENT_DATE;`,
     []
   )
   const mostActiveDistrict = await db.query(
-    `SELECT municipality_name, COUNT(*) AS most_active_district
+    `SELECT municipality_name, COUNT(DISTINCT thread_id) AS most_active_district
      FROM mv_dashboard_base
      WHERE created_on::date = CURRENT_DATE
      GROUP BY municipality_name
@@ -17,7 +17,7 @@ export async function queryDashboardKpi(): Promise<DashboardKpi> {
     []
   )
   const mostCommonCategory = await db.query(
-    `SELECT type AS category, COUNT(type)
+    `SELECT type AS category, COUNT(DISTINCT thread_id)
      FROM mv_dashboard_base
      WHERE created_on::date = CURRENT_DATE
      GROUP BY category
@@ -26,7 +26,7 @@ export async function queryDashboardKpi(): Promise<DashboardKpi> {
     []
   )
   const activeIncidents = await db.query(
-    `SELECT COUNT(*) AS active_incidents
+    `SELECT COUNT(DISTINCT thread_id) AS active_incidents
      FROM mv_dashboard_base
      WHERE is_active = true AND created_on::date = CURRENT_DATE;`,
     []
