@@ -4,7 +4,7 @@ export async function queryMunicipalityAnalysis(id: string) {
     `
     SELECT
         i.created_on::date as date,
-        COUNT(*)::int as amount
+        COUNT(DISTINCT i.thread_id)::int as amount
     FROM 
         incidents i
     JOIN 
@@ -25,7 +25,7 @@ export async function queryMunicipalityAnalysis(id: string) {
     `
     SELECT
         c.type as category,
-        COUNT(*)::int as amount
+        COUNT(DISTINCT i.thread_id)::int as amount
     FROM 
         incidents i
     JOIN municipality m 

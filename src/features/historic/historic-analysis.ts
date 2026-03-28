@@ -22,7 +22,7 @@ export async function queryHistoricAnalysis() {
     SELECT 
         DATE_TRUNC('day', created_on) as date,
         c.type as category,
-        COUNT(*)::int as amount
+        COUNT(DISTINCT i.thread_id)::int as amount
     FROM 
         incidents i
     JOIN category c 
@@ -41,7 +41,7 @@ export async function queryHistoricAnalysis() {
     `
     SELECT
         m.municipality_name,
-        COUNT(*)::int as total_incidents
+        COUNT(DISTINCT i.thread_id)::int AS amount
     FROM 
         incidents i
     JOIN 
@@ -53,7 +53,7 @@ export async function queryHistoricAnalysis() {
     GROUP BY 
         m.municipality_name
     ORDER BY 
-        COUNT(*) DESC
+        amount DESC
     LIMIT 5;
     `,
     []
@@ -63,7 +63,7 @@ export async function queryHistoricAnalysis() {
     `
     SELECT
         c.type as category,
-        COUNT(c.type)::int as amount
+        COUNT(DISTINCT i.thread_id)::int as amount
     FROM 
         incidents i
     JOIN category c 
