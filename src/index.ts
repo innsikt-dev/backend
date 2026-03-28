@@ -4,15 +4,25 @@ import { Hono } from 'hono'
 import { dashboard } from './features/dashboard/route.js'
 import { historic } from './features/historic/route.js'
 import { municipality } from './features/municipality/route.js'
+import { runSync } from './sync/index.js'
+import { fetchPoliceLog } from './api/police/index.js'
+import { transformPoliceLog } from './api/police/transform.js'
+import { comparison } from './features/comparison/route.js'
 const app = new Hono()
 app.onError((err, c) => {
   console.error(err)
   return c.json({ error: 'Internal server error' }, 500)
 })
 
+/* app.get('/', async (c) => {
+  const data = await fetchPoliceLog()
+  await transformPoliceLog(data)
+  return c.text('hello')
+}) */
 app.route('/dashboard/', dashboard)
 app.route('/historic/', historic)
 app.route('/municipality/', municipality)
+app.route('/comparison/', comparison)
 /* runSync() */
 serve(
   {
