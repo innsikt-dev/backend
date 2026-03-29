@@ -6,7 +6,9 @@ export function runSync() {
   cron.schedule('*/5 * * * *', async () => {
     console.log(`Starting sync`)
     const data = await fetchPoliceLog()
-    console.log(`Finished sync ${data.data}`)
+    console.log(
+      `Finished sync for: ${data.data.forEach((D) => console.log(D.threadId))}`
+    )
     await transformPoliceLog(data)
   })
 }
