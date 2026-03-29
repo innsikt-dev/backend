@@ -1,8 +1,8 @@
 const validPeriods = ['7d', '30d', '365d'] as const
-type validPeriod = (typeof validPeriods)[number]
+type ValidRange = (typeof validPeriods)[number]
 
-export function isValidRange(period: string): validPeriod {
+export function isValidRange(period: string): ValidRange {
   return (validPeriods as readonly string[]).includes(period)
-    ? (period as validPeriod)
+    ? (period as ValidRange)
     : '7d'
 }

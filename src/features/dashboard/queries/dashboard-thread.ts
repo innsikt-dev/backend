@@ -27,5 +27,5 @@ export async function queryDashboardThread(threadId: string) {
     [threadId]
   )
 
-  return query.rows.length === 0 ? [] : query.rows
+  return query.rows
 }

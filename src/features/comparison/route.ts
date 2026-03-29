@@ -18,10 +18,12 @@ comparison.get('municipalities', async (c) => {
 comparison.get('municipalities/analysis', async (c) => {
   const municipality1 = c.req.query('municipality1') ?? 'Oslo'
   const municipality2 = c.req.query('municipality2') ?? 'Bergen'
+  const period = c.req.query('periode')
 
   const data = await queryMunicipalitiesAnalysis({
     id1: municipality1,
     id2: municipality2,
+    period: period ?? '',
   })
 
   return c.json(data)

@@ -33,9 +33,9 @@ export async function queryDashboardKpi(): Promise<DashboardKpi> {
   )
 
   return {
-    totalIncidents: Number(totalIncidents.rows[0]?.total_incidents ?? 0),
+    totalIncidents: totalIncidents.rows[0]?.total_incidents ?? 0,
     mostActiveDistrict: mostActiveDistrict.rows[0]?.municipality_name ?? null,
     mostCommonCategory: mostCommonCategory.rows[0]?.category ?? null,
-    activeIncidents: Number(activeIncidents.rows[0]?.active_incidents ?? 0),
+    activeIncidents: activeIncidents.rows[0]?.active_incidents ?? 0,
   }
 }

@@ -28,5 +28,5 @@ LIMIT 30;
     []
   )
 
-  return query.rows.length === 0 ? [] : query.rows
+  return query.rows
 }
