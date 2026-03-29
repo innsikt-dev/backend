@@ -1,5 +1,7 @@
 import * as db from '../../db/index.js'
-export async function queryHistoricAnalysis() {
+import { isValidRange } from '../../lib/config/is-valid-range.js'
+export async function queryHistoricAnalysis(range: string) {
+  const validRange = isValidRange(range)
   const heatmap = await db.query(
     `
         SELECT 
@@ -9,13 +11,13 @@ export async function queryHistoricAnalysis() {
         FROM 
             incidents
         WHERE 
-            created_on >= NOW() - INTERVAL '30 days'
+            created_on >= NOW() - $1::interval
         GROUP BY 
             day, time
         ORDER BY 
             day, time;
         `,
-    []
+    [validRange]
   )
   const trends = await db.query(
     `
@@ -28,13 +30,13 @@ export async function queryHistoricAnalysis() {
     JOIN category c 
         ON c.id = i.category_id
     WHERE 
-        created_on > NOW () - INTERVAL '30 days'  
+        created_on > NOW () - $1::interval 
     GROUP BY 
         c.type,  DATE_TRUNC('day', created_on)
     ORDER BY 
         DATE_TRUNC('day', created_on) ASC;
     `,
-    []
+    [validRange]
   )
 
   const topMunicipalities = await db.query(
@@ -49,14 +51,14 @@ export async function queryHistoricAnalysis() {
     ON 
         m.id = i.municipality_id
     WHERE 
-        created_on >= NOW() - INTERVAL '30 days'
+        created_on >= NOW() - $1::interval
     GROUP BY 
         m.municipality_name
     ORDER BY 
         amount DESC
-    LIMIT 5;
+    LIMIT 10;
     `,
-    []
+    [validRange]
   )
 
   const categoryDistribution = await db.query(
@@ -69,21 +71,19 @@ export async function queryHistoricAnalysis() {
     JOIN category c 
         ON c.id = i.category_id
     WHERE 
-        created_on > NOW () - INTERVAL '30 days'  
+        created_on > NOW () - $1::interval  
     GROUP BY 
         c.type
     ORDER BY 
         amount DESC
-    LIMIT 5;
+    LIMIT 10;
     `,
-    []
+    [validRange]
   )
   return {
-    heatMap: heatmap.rows.length === 0 ? [] : heatmap.rows,
-    trends: trends.rows.length === 0 ? [] : trends.rows,
-    topMunicipalities:
-      topMunicipalities.rows.length === 0 ? [] : topMunicipalities.rows,
-    categoryDistribution:
-      categoryDistribution.rows.length === 0 ? [] : categoryDistribution.rows,
+    heatMap: heatmap.rows,
+    trends: trends.rows,
+    topMunicipalities: topMunicipalities.rows,
+    categoryDistribution: categoryDistribution.rows,
   }
 }

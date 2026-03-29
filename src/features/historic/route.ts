@@ -3,7 +3,8 @@ import { queryHistoricAnalysis } from './historic-analysis.js'
 export const historic = new Hono()
 
 historic.get('analysis', async (c) => {
-  const data = await queryHistoricAnalysis()
+  const period = c.req.query('periode')
+  const data = await queryHistoricAnalysis(period || '')
 
   return c.json(data)
 })

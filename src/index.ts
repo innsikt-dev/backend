@@ -11,7 +11,7 @@ app.onError((err, c) => {
   console.error(err)
   return c.json({ error: 'Internal server error' }, 500)
 })
-runSync()
+/* runSync() */
 app.route('/dashboard/', dashboard)
 app.route('/historic/', historic)
 app.route('/municipality/', municipality)
