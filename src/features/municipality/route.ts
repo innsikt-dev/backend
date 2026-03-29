@@ -18,6 +18,7 @@ municipality.get(':id', async (c) => {
 
 municipality.get('/analysis/:id', async (c) => {
   const id = c.req.param('id')
-  const data = await queryMunicipalityAnalysis(id)
+  const period = c.req.query('periode')
+  const data = await queryMunicipalityAnalysis(id, period ?? '')
   return c.json(data)
 })
