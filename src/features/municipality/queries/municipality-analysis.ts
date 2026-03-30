@@ -70,7 +70,7 @@ export async function queryMunicipalityAnalysis(id: string, period: string) {
         LOWER(m.municipality_name) = LOWER($1) 
     AND 
         created_on > NOW() - $2::interval
-    ORDER BY i.created_on DESC;
+    ORDER BY i.created_on DESC, i.thread_id DESC;
     `,
     [id, validRange]
   )

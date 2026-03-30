@@ -22,8 +22,7 @@ export async function queryDashboardEvents() {
     WHERE created_on::date = CURRENT_DATE AND is_active = true
     ORDER BY i.thread_id, i.created_on ASC
 ) sub
-ORDER BY is_active DESC, created_on DESC
-LIMIT 30;
+ORDER BY is_active DESC, created_on DESC;
 `,
     []
   )
