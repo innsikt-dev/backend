@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { serve } from '@hono/node-server'
 import { runSync } from './sync/index.js'
 import { app } from './app.js'

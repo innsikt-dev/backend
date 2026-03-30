@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import { Hono } from 'hono'
 import { dashboard } from './features/dashboard/route.js'
 import { historic } from './features/historic/route.js'
