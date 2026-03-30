@@ -3,7 +3,7 @@ import type { DashboardKpi } from './types.js'
 
 export async function queryDashboardKpi(): Promise<DashboardKpi> {
   const totalIncidents = await db.query(
-    `SELECT COUNT(DISTINCT thread_id) AS total_incidents FROM mv_dashboard_base
+    `SELECT COUNT(DISTINCT thread_id)::int AS total_incidents FROM mv_dashboard_base
      WHERE created_on::date = CURRENT_DATE;`,
     []
   )
@@ -26,7 +26,7 @@ export async function queryDashboardKpi(): Promise<DashboardKpi> {
     []
   )
   const activeIncidents = await db.query(
-    `SELECT COUNT(DISTINCT thread_id) AS active_incidents
+    `SELECT COUNT(DISTINCT thread_id)::int AS active_incidents
      FROM mv_dashboard_base
      WHERE is_active = true AND created_on::date = CURRENT_DATE;`,
     []
