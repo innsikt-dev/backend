@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
 import { queryHistoricAnalysis } from './historic-analysis.js'
-export const historic = new Hono()
+export const analytics = new Hono()
 
-historic.get('analysis', async (c) => {
+analytics.get('/', async (c) => {
   const period = c.req.query('period')
   const data = await queryHistoricAnalysis(period ?? '')
 
