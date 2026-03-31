@@ -2,13 +2,12 @@ import * as db from '../../../db/index.js'
 export async function queryDashboardThread(threadId: string) {
   const query = await db.query(
     `
-       SELECT
-      i.thread_id,
+    SELECT
+        i.thread_id,
         m.id,
         m.municipality_name,
         m.lat,
         m.lng,
-        i.thread_id,
         i.area,
         i.text,
         c.type,
