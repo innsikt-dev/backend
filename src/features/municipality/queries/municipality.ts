@@ -20,10 +20,9 @@ export async function queryMunicipality(id: string) {
     [id]
   )
 
-  const municipalityIncidents = await db.query(
+  const incidents = await db.query(
     `
     SELECT 
-        m.municipality_name,
         COUNT(DISTINCT i.thread_id)::int as amount
     FROM
         incidents i
@@ -31,16 +30,12 @@ export async function queryMunicipality(id: string) {
     ON 
         m.id = i.municipality_id
     WHERE 
-        LOWER(m.municipality_name) = LOWER($1) 
-    GROUP BY 
-        m.municipality_name;
-
-
+        LOWER(m.municipality_name) = LOWER($1);
     `,
     [id]
   )
 
-  const municipalityCommonCategory = await db.query(
+  const commonCategory = await db.query(
     `
     SELECT 
        c.type AS category
@@ -63,10 +58,10 @@ export async function queryMunicipality(id: string) {
     [id]
   )
 
-  const daysWithData = await db.query(
+  const datasetDays = await db.query(
     `
     SELECT 
-        COUNT(i.id)::int AS amount FROM incidents i
+        COUNT(DISTINCT i.thread_id)::int AS amount FROM incidents i
     JOIN 
         municipality m 
     ON 
@@ -77,16 +72,10 @@ export async function queryMunicipality(id: string) {
 
   return {
     municipality: municipality.rows.length === 0 ? [] : municipality.rows[0],
-    municipalityIncidents:
-      municipalityIncidents.rows.length === 0
-        ? []
-        : municipalityIncidents.rows[0].amount,
-
-    municipalityCommonCategory:
-      municipalityCommonCategory.rows.length === 0
-        ? []
-        : municipalityCommonCategory.rows[0].category,
-    daysWithData:
-      daysWithData.rows.length === 0 ? [] : daysWithData.rows[0].amount,
+    kpi: {
+      incidents: incidents.rows,
+      commonCategory: commonCategory.rows,
+      datasetDays: datasetDays.rows,
+    },
   }
 }

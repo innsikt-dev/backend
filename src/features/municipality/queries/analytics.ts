@@ -1,6 +1,6 @@
 import * as db from '../../../db/index.js'
 import { isValidRange } from '../../../lib/config/is-valid-range.js'
-export async function queryMunicipalityAnalysis(id: string, period: string) {
+export async function queryAnalytics(id: string, period: string) {
   const validRange = isValidRange(period)
   const incidentsOverTime = await db.query(
     `
@@ -52,16 +52,19 @@ export async function queryMunicipalityAnalysis(id: string, period: string) {
 
   const events = await db.query(
     `
-    SELECT
+      SELECT
         i.created_on as date,
         i.text,
-        c.type as category
+        c.type as category,
+        pd.district_name
     FROM 
         incidents i
     JOIN 
         municipality m 
     ON 
         m.id = i.municipality_id 
+    JOIN
+        police_district pd ON pd.id = m.police_district_id
     JOIN 
         category C 
     ON 
@@ -70,7 +73,8 @@ export async function queryMunicipalityAnalysis(id: string, period: string) {
         LOWER(m.municipality_name) = LOWER($1) 
     AND 
         created_on > NOW() - $2::interval
-    ORDER BY i.created_on DESC, i.thread_id DESC;
+    ORDER BY i.created_on DESC, i.thread_id DESC
+    LIMIT 20;
     `,
     [id, validRange]
   )

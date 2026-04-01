@@ -1,12 +1,12 @@
 import { Hono } from 'hono'
-import { queryMunicipalityName } from './queries/municipality-name.js'
 import { queryMunicipality } from './queries/municipality.js'
-import { queryMunicipalityAnalysis } from './queries/municipality-analysis.js'
+import { queryMunicipalities } from './queries/municipalities.js'
+import { queryAnalytics } from './queries/analytics.js'
 
 export const municipality = new Hono()
 
 municipality.get('municipalities', async (c) => {
-  const data = await queryMunicipalityName()
+  const data = await queryMunicipalities()
   return c.json(data)
 })
 
@@ -16,9 +16,9 @@ municipality.get(':id', async (c) => {
   return c.json(data)
 })
 
-municipality.get('/analysis/:id', async (c) => {
+municipality.get('/analytics/:id', async (c) => {
   const id = c.req.param('id')
   const period = c.req.query('period')
-  const data = await queryMunicipalityAnalysis(id, period ?? '')
+  const data = await queryAnalytics(id, period ?? '')
   return c.json(data)
 })
