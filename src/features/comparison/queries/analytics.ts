@@ -2,7 +2,7 @@ import * as db from '../../../db/index.js'
 import { isValidRange } from '../../../lib/config/is-valid-range.js'
 import type { Payload } from './types.js'
 
-export async function queryMunicipalitiesAnalysis(payload: Payload) {
+export async function queryAnalytics(payload: Payload) {
   const validRange = isValidRange(payload.period ?? '')
 
   const keywordIncidents = await db.query(
