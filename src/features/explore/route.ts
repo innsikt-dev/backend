@@ -1,9 +1,15 @@
 import { Hono } from 'hono'
 import { queryMunicipalities } from './queries/municipalities.js'
 import { queryAnalytics } from './queries/analytics.js'
-export const comparison = new Hono()
+import { queryMunicipalityNames } from './queries/names.js'
 
-comparison.get('municipalities', async (c) => {
+export const explore = new Hono()
+
+explore.get('/municipalities/names', async (c) => {
+  const municipalities = await queryMunicipalityNames()
+  return c.json(municipalities)
+})
+explore.get('municipalities', async (c) => {
   const period = c.req.query('period') ?? '7d'
   const municipality1 = c.req.query('municipality1') ?? 'Oslo'
   const municipality2 = c.req.query('municipality2') ?? 'Bergen'
@@ -17,7 +23,7 @@ comparison.get('municipalities', async (c) => {
   return c.json(data)
 })
 
-comparison.get('municipalities/analytics', async (c) => {
+explore.get('municipalities/analytics', async (c) => {
   const period = c.req.query('period') ?? '7d'
   const municipality1 = c.req.query('municipality1') ?? 'Oslo'
   const municipality2 = c.req.query('municipality2') ?? 'Bergen'
