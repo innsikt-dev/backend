@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { dashboard } from './features/dashboard/route.js'
 import { analytics } from './features/analytics/route.js'
 import { explore } from './features/explore/route.js'
+import { districts } from './features/districts/route.js'
 export const app = new Hono()
 app.onError((err, c) => {
   console.error(err)
@@ -11,3 +12,4 @@ app.onError((err, c) => {
 app.route('/dashboard/', dashboard)
 app.route('/analytics', analytics)
 app.route('/explore/', explore)
+app.route('/districts/', districts)
