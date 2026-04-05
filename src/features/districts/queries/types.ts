@@ -4,3 +4,18 @@ export type DistrictKPI = {
   active: number
   top_category: string
 }
+
+export type DistrictTrend = {
+  district_name: string
+  amount: number
+  date: string
+}
+export type CategoryDistribution = {
+  category: string
+  amount: number
+}
+
+export type DistrictAnalytics = {
+  trends: DistrictTrend[]
+  categoryDistribution: CategoryDistribution[]
+}
