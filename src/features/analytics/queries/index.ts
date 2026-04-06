@@ -1,8 +1,11 @@
 import * as db from '../../../db/index.js'
 import { isValidRange } from '../../../lib/config/is-valid-range.js'
+import type { AnalyticsQueryResult } from './types.js'
 
-export async function queryAnalytics(range: string) {
-  const validRange = isValidRange(range)
+export async function queryAnalytics(
+  period: string
+): Promise<AnalyticsQueryResult | []> {
+  const validRange = isValidRange(period)
   const heatmap = await db.query(
     `
         SELECT 

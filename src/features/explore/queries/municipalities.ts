@@ -1,9 +1,10 @@
-import { isValid } from 'zod/v3'
 import * as db from '../../../db/index.js'
-import type { Payload } from './types.js'
+import type { MunicipalityQueryResult, Payload } from './types.js'
 import { isValidRange } from '../../../lib/config/is-valid-range.js'
 
-export async function queryMunicipalities(payload: Payload) {
+export async function queryMunicipalities(
+  payload: Payload
+): Promise<MunicipalityQueryResult> {
   const validRange = isValidRange(payload.period ?? '')
   const query = await db.query(
     `
@@ -53,12 +54,12 @@ top_category AS (
 daily_avg AS (
   SELECT
     municipality_name,
-    ROUND(AVG(daily_count), 1) AS avg_per_day
+    ROUND(AVG(daily_count), 1)::float AS avg_per_day
   FROM (
     SELECT
       municipality_name,
       created_on::date AS date,
-      COUNT(thread_id) AS daily_count
+      COUNT(thread_id)::int AS daily_count
     FROM 
       base
     GROUP BY 
@@ -70,7 +71,7 @@ daily_avg AS (
 SELECT
   b.municipality_name,
   b.district_name,
-  COUNT(b.thread_id) AS total_incidents,
+  COUNT(b.thread_id)::int AS total_incidents,
   tc.most_common AS most_common_category,
   da.avg_per_day
 FROM 
@@ -88,11 +89,11 @@ GROUP
     `,
     [payload.id1, payload.id2, validRange]
   )
+
   const findMunicipality = (name: string) =>
     query.rows.find(
       (r) => r.municipality_name.toLowerCase() === name.toLowerCase()
-    ) ?? []
-
+    ) ?? null
   return {
     municipalityOne: findMunicipality(payload.id1),
     municipalityTwo: findMunicipality(payload.id2),

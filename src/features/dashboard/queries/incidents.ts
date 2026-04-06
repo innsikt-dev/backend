@@ -1,5 +1,8 @@
 import * as db from '../../../db/index.js'
-export async function queryDashboardThread(threadId: string) {
+import type { DashboardIncident } from './types.js'
+export async function queryDashboardIncidents(
+  threadId: string
+): Promise<DashboardIncident[]> {
   const query = await db.query(
     `
     SELECT
@@ -25,6 +28,5 @@ export async function queryDashboardThread(threadId: string) {
         `,
     [threadId]
   )
-
   return query.rows
 }

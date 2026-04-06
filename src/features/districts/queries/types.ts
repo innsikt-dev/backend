@@ -1,4 +1,4 @@
-export type DistrictKPI = {
+export type DistrictKPIQueryResult = {
   district_name: string
   total_incidents: number
   active: number
@@ -15,7 +15,7 @@ export type CategoryDistribution = {
   amount: number
 }
 
-export type DistrictAnalytics = {
+export type DistrictAnalyticsQueryResult = {
   trends: DistrictTrend[]
   categoryDistribution: CategoryDistribution[]
 }

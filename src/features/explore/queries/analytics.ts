@@ -1,8 +1,10 @@
 import * as db from '../../../db/index.js'
 import { isValidRange } from '../../../lib/config/is-valid-range.js'
-import type { Payload } from './types.js'
+import type { ExploreAnalyticsQueryResult, Payload } from './types.js'
 
-export async function queryAnalytics(payload: Payload) {
+export async function queryAnalytics(
+  payload: Payload
+): Promise<ExploreAnalyticsQueryResult> {
   const validRange = isValidRange(payload.period ?? '')
   const perCapita = payload.perCapita === 'true' ? true : null
 

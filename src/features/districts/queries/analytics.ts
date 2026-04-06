@@ -1,10 +1,10 @@
 import * as db from '../../../db/index.js'
 import { isValidRange } from '../../../lib/config/is-valid-range.js'
-import type { DistrictAnalytics } from './types.js'
+import type { DistrictAnalyticsQueryResult } from './types.js'
 export async function queryAnalytics(
   district: string | undefined,
   period: string
-): Promise<DistrictAnalytics> {
+): Promise<DistrictAnalyticsQueryResult> {
   const validRange = isValidRange(period)
   const trends = await db.query(
     `

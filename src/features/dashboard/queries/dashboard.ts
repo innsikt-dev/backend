@@ -1,12 +1,13 @@
 import * as db from '../../../db/index.js'
-export async function queryDashboard() {
+import type { DashboardKpi, DashboardQueryResult } from './types.js'
+export async function queryDashboard(): Promise<DashboardQueryResult> {
   const totalIncidents = await db.query(
     `SELECT COUNT(DISTINCT thread_id)::int AS total_incidents FROM mv_dashboard_base
       WHERE created_on::date = CURRENT_DATE;`,
     []
   )
   const mostActiveDistrict = await db.query(
-    `SELECT municipality_name, COUNT(DISTINCT thread_id) AS most_active_district
+    `SELECT municipality_name, COUNT(DISTINCT thread_id)::int AS most_active_district
       FROM mv_dashboard_base
       WHERE created_on::date = CURRENT_DATE
       GROUP BY municipality_name
@@ -15,7 +16,7 @@ export async function queryDashboard() {
     []
   )
   const mostCommonCategory = await db.query(
-    `SELECT type AS category, COUNT(DISTINCT thread_id)
+    `SELECT type AS category, COUNT(DISTINCT thread_id)::int AS amount
       FROM mv_dashboard_base
       WHERE created_on::date = CURRENT_DATE
       GROUP BY category

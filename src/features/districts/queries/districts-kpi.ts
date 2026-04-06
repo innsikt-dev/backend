@@ -1,7 +1,7 @@
 import * as db from '../../../db/index.js'
-import type { DistrictKPI } from './types.js'
+import type { DistrictKPIQueryResult } from './types.js'
 
-export async function queryDistrictsKpi(): Promise<DistrictKPI[]> {
+export async function queryDistrictsKpi(): Promise<DistrictKPIQueryResult[]> {
   const query = await db.query(
     `
 WITH base AS 
