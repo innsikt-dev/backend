@@ -21,7 +21,7 @@ export async function queryAnalytics(
     JOIN police_district pd 
         ON pd.id = m.police_district_id
     WHERE 
-        ($1::TEXT IS NULL  OR LOWER(district_name) = LOWER($1))
+        ($1::TEXT IS NULL OR LOWER(district_name) = LOWER($1))
     AND 
         created_on > NOW() - $2::interval
     GROUP BY   

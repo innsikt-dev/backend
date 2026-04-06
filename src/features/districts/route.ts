@@ -12,6 +12,7 @@ districts.get('kpi', async (c) => {
 districts.get('analytics', async (c) => {
   const district = c.req.query('district')
   const period = c.req.query('period') ?? '7d'
+  console.log(district, period)
   const data = await queryAnalytics(district, period)
   return c.json(data)
 })
