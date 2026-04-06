@@ -5,12 +5,14 @@ import { notifyClients } from '../stream/index.js'
 
 export function runSync() {
   cron.schedule('* * * * *', async () => {
-    console.log(`Starting sync`)
-    const data = await fetchPoliceLog()
-    console.log(
-      `Finished sync for: ${data.data.forEach((D) => console.log(D.threadId))}`
-    )
-    await transformPoliceLog(data)
-    notifyClients(data.data.length)
+    try {
+      console.log('Starting sync')
+      const data = await fetchPoliceLog()
+      if (!data) return
+      await transformPoliceLog(data)
+      notifyClients(data.data.length)
+    } catch (e) {
+      console.error('Sync failed:', e)
+    }
   })
 }
