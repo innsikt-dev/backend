@@ -27,11 +27,13 @@ explore.get('municipalities/analytics', async (c) => {
   const period = c.req.query('period') ?? '7d'
   const municipality1 = c.req.query('municipality1') ?? 'Oslo'
   const municipality2 = c.req.query('municipality2') ?? 'Bergen'
+  const perCapita = c.req.query('perCapita') ?? ''
 
   const data = await queryAnalytics({
     id1: municipality1,
     id2: municipality2,
     period: period,
+    perCapita: perCapita,
   })
 
   return c.json(data)

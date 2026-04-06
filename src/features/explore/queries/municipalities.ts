@@ -1,7 +1,10 @@
+import { isValid } from 'zod/v3'
 import * as db from '../../../db/index.js'
 import type { Payload } from './types.js'
+import { isValidRange } from '../../../lib/config/is-valid-range.js'
 
 export async function queryMunicipalities(payload: Payload) {
+  const validRange = isValidRange(payload.period ?? '')
   const query = await db.query(
     `
   WITH base AS (
@@ -83,7 +86,7 @@ WHERE
 GROUP 
   BY b.municipality_name, b.district_name, tc.most_common, da.avg_per_day;
     `,
-    [payload.id1, payload.id2, payload.period]
+    [payload.id1, payload.id2, validRange]
   )
   const findMunicipality = (name: string) =>
     query.rows.find(

@@ -38,6 +38,13 @@ ON CONFLICT(municipality_name) DO UPDATE SET
       [m.municipality_name, districtMap.get(m.district_name), lat, lng]
     )
 
+    await db.query(
+      `INSERT INTO population (municipality_name, population)
+       VALUES ($1, 0)
+       ON CONFLICT (municipality_name) DO NOTHING`,
+      [m.municipality_name]
+    )
+
     await new Promise((resolve) => setTimeout(resolve, 1100))
   }
 }

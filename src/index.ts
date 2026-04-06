@@ -6,6 +6,7 @@ import { app } from './app.js'
 if (process.env.NODE_ENV === 'production') {
   runSync()
 }
+
 serve(
   {
     fetch: app.fetch,
