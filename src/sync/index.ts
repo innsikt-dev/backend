@@ -4,7 +4,7 @@ import { transformPoliceLog } from '../api/police/transform.js'
 import { notifyClients } from '../stream/index.js'
 
 export function runSync() {
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('*/5 * * * *', async () => {
     try {
       console.log('Starting sync')
       const data = await fetchPoliceLog()
