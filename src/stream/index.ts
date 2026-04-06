@@ -14,8 +14,10 @@ export function sseHandler(c: Context) {
 
     stream.onAbort(() => {
       clients.delete(send)
+      console.log(`Client disconnected. Total: ${clients.size}`)
     })
     clients.add(send)
+    console.log(`Client connected. Total: ${clients.size}`)
 
     while (!stream.aborted) {
       await stream.sleep(30000)

@@ -9,8 +9,12 @@ app.onError((err, c) => {
   console.error(err)
   return c.json({ error: 'Internal server error' }, 500)
 })
-app.get('/sse', (c) => sseHandler(c))
+
 app.route('/dashboard/', dashboard)
 app.route('/analytics', analytics)
 app.route('/explore/', explore)
 app.route('/districts/', districts)
+app.get('/sse', (c) => {
+  c.header('Access-Control-Allow-Origin', '*')
+  return sseHandler(c)
+})
