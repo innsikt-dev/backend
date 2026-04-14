@@ -95,7 +95,6 @@ GROUP
       (r) => r.municipality_name.toLowerCase() === name.toLowerCase()
     ) ?? null
 
-  console.log(payload.id1, payload.id2)
   return {
     municipalityOne: findMunicipality(payload.id1),
     municipalityTwo: findMunicipality(payload.id2),
