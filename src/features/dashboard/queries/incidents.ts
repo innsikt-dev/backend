@@ -20,8 +20,7 @@ export async function queryDashboardIncidents(
     FROM incidents i
     JOIN category c ON c.id = i.category_id
     JOIN municipality m ON m.id = i.municipality_id
-    WHERE created_on::date = CURRENT_DATE
-    AND LOWER(thread_id) = LOWER($1)
+    WHERE LOWER(thread_id) = LOWER($1)
     ORDER BY i.thread_id, i.created_on ASC
 
 

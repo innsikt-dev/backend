@@ -94,6 +94,7 @@ GROUP
     query.rows.find(
       (r) => r.municipality_name.toLowerCase() === name.toLowerCase()
     ) ?? null
+
   return {
     municipalityOne: findMunicipality(payload.id1),
     municipalityTwo: findMunicipality(payload.id2),
