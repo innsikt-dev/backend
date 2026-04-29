@@ -3,16 +3,16 @@ import { fetchPoliceLog } from '../api/police/index.js'
 import { transformPoliceLog } from '../api/police/transform.js'
 import { notifyClients } from '../stream/index.js'
 
-export function runSync() {
-  cron.schedule('*/5 * * * *', async () => {
-    try {
-      console.log('Starting sync')
-      const data = await fetchPoliceLog()
-      if (!data) return
-      await transformPoliceLog(data)
-      notifyClients(data.data.length)
-    } catch (e) {
-      console.error('Sync failed:', e)
-    }
-  })
+export async function runSync() {
+  try {
+    console.log('Starting sync')
+    const data = await fetchPoliceLog()
+    if (!data) return false
+    await transformPoliceLog(data)
+    notifyClients(data.data.length)
+    return true
+  } catch (e) {
+    console.error('Sync failed:', e)
+    return false
+  }
 }
